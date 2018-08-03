@@ -1,5 +1,6 @@
 const express = require('express')
 const bodyParser = require('body-parser')
+const _ = require('lodash');
 
 var {mongoose} = require('./db/mongoose.js');
 var {Todo} = require('./models/todo.js');
@@ -60,6 +61,30 @@ app.delete("/todos/:id", (req, res)=> {
     return res.status(404).send("Id is invalid");
   }
   Todo.findByIdAndDelete(id).then((todo)=>{
+    if (!todo) {
+      return res.status(404).send("user not found");
+    }
+    res.send({todo});
+  }).catch((e)=> {
+    console.log(e);
+  })
+});
+
+app.patch("/todos/:id", (req, res)=> {
+  var id = req.params.id;
+  if (!isIdValid(id)) {
+    return res.status(404).send("Id is invalid");
+  }
+  let body = _.pick(req.body, ['text','completed']);
+
+  if (_.isBoolean(body.completed) && body.completed) {
+    body.completedAt = new Date().getTime();
+  } else {
+    body.completedAt = null;
+    bod.completed = false;
+  }
+
+  Todo.findByIdAndUpdate(id, { $set: body}, {new: true}).then((todo)=>{
     if (!todo) {
       return res.status(404).send("user not found");
     }
