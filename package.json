@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server/server.js"
+    "test": "SET \"NODE_ENV=test\" && mocha server/**/*.test.js",
+    "start": "nodemon --exec \"npm test\"",
+    "test-watch": "n"
   },
   "engines": {
     "node": "10.5.0"
@@ -18,5 +19,10 @@
     "lodash": "^4.17.10",
     "mongodb": "^3.1.1",
     "mongoose": "^5.2.4"
+  },
+  "devDependencies": {
+    "expect": "^23.4.0",
+    "mocha": "^5.2.0",
+    "supertest": "^3.1.0"
   }
 }

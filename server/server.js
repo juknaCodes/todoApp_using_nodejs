@@ -1,3 +1,4 @@
+require('./config/config')
 const express = require('express')
 const bodyParser = require('body-parser')
 const _ = require('lodash');
@@ -81,7 +82,7 @@ app.patch("/todos/:id", (req, res)=> {
     body.completedAt = new Date().getTime();
   } else {
     body.completedAt = null;
-    bod.completed = false;
+    body.completed = false;
   }
 
   Todo.findByIdAndUpdate(id, { $set: body}, {new: true}).then((todo)=>{
@@ -101,3 +102,5 @@ app.listen(PORT, ()=> {
 let isIdValid = (id)=> {
   return ObjectID.isValid(id);
 }
+
+module.exports = {app};
