@@ -3,9 +3,10 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const _ = require('lodash');
 
-var {mongoose} = require('./db/mongoose.js');
-var {Todo} = require('./models/todo.js');
-var {User} = require('./models/user.js');
+var {mongoose} = require('./db/mongoose');
+var {Todo} = require('./models/todo');
+var {User} = require('./models/user');
+let {authenticate} = require('./middleware/authenticate');
 const {ObjectID} = require('mongodb');
 let PORT = process.env.PORT || 3000;
 
@@ -23,6 +24,10 @@ app.post("/todos", (req, res)=> {
   }, (err)=>{
     res.status(400).send(err);
   })
+})
+
+app.get("/users/me", authenticate, (req, res)=> {
+  res.send(req.user);
 })
 
 app.post("/users", (req, res)=> {
